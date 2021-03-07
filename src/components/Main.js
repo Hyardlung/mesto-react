@@ -1,50 +1,25 @@
 import {useState, useEffect} from 'react';
 
-function Main(props) {
 
-  function handleEditAvatarClick() {
-    const avatarButton = document
-        .querySelector('.avatar__button')
-        .addEventListener('click', () => {
-      const popupUpdateAvatar = document
-          .querySelector('.popup_update-avatar')
-          .classList.add('popup_opened');
-    })
-  }
+export default function Main({onEditProfile, onAddPlace, onEditAvatar}) {
 
-  function handleEditProfileClick() {
-    const profileEditButton = document
-        .querySelector('.profile__edit-button')
-        .addEventListener('click', () => {
-          const popupEditProfile = document
-              .querySelector('.popup_edit-profile')
-              .classList.add('popup_opened');
-        })
-  }
-
-  function handleAddPlaceClick() {
-    const addPlaceButton = document
-        .querySelector('.profile__add-button')
-        .addEventListener('click', () => {
-          const popupAddPlace = document
-              .querySelector('.popup_add-card')
-              .classList.add('popup_opened');
-        })
-  }
+  const [userName, setUserName] = useState('');
+  const [userAbout, serUserAbout] = useState('');
+  const [userAvatar, setUserAvatar] = useState('#');
 
   return (
       <main className="main">
         <section className="profile page__profile">
           <div className="avatar profile__avatar">
-            <img src="#" alt="Avatar" className="avatar__image" />
-            <button onClick={handleEditAvatarClick} className="avatar__button"> </button>
+            <img src={userAvatar} alt="Аватар пользователя" className="avatar__image" />
+            <button className="avatar__button" onClick={onEditAvatar}> </button>
           </div>
           <div className="profile__info">
-            <h1 className="profile__name"> </h1>
-            <p className="profile__about"> </p>
-            <button onClick={handleEditProfileClick} type="button" className="profile__edit-button"> </button>
+            <h1 className="profile__name">{userName}</h1>
+            <p className="profile__about">{userAbout}</p>
+            <button className="profile__edit-button" type="button" onClick={onEditProfile}> </button>
           </div>
-          <button onClick={handleAddPlaceClick} type="button" className="profile__add-button"> </button>
+          <button className="profile__add-button" type="button" onClick={onAddPlace}> </button>
         </section>
 
         <section className="elements">
@@ -69,5 +44,3 @@ function Main(props) {
       </main>
   )
 }
-
-export default Main;
