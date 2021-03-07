@@ -4,7 +4,8 @@ import '../index.css';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import PopupWithForm from "./PopupWithForm";
+import PopupWithForm from './PopupWithForm';
+import ImagePopup from './ImagePopup';
 
 
 export default function App() {
@@ -21,17 +22,23 @@ export default function App() {
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(true);
   }
+  // открытие попапа предпросмотра карточки
+  const handleCardClick = () => {
+    setIsImagePopupOpen(true);
+  }
   // закрытие любого из попапов
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
+    setIsImagePopupOpen(false);
   }
 
   // ХУКИ
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
 
   return (
     <>
@@ -137,17 +144,7 @@ export default function App() {
         </fieldset>
       </PopupWithForm>
 
-      {/*попап предпросмотра изображения*/}
-      <div className="popup popup_preview">
-        <div className="popup__container popup__container_preview">
-          <button type="button" className="popup__close-button popup__close-button_preview">
-          </button>
-          <figure className="preview">
-            <img src="#" alt="#" className="preview__image" />
-            <figcaption className="preview__caption"> </figcaption>
-          </figure>
-        </div>
-      </div>
+      <ImagePopup isOpen={isImagePopupOpen} onClose={closeAllPopups}/>
 
       {/*попап подтверждения удаления карточки*/}
       <div className="popup popup_confirm-delete">
