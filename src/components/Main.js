@@ -26,6 +26,7 @@ export default function Main({onEditProfile, onAddPlace, onEditAvatar, onCardCli
               id: item._id,
               ownerId: item.owner._id,
             }));
+
             setUserName(userData.name);
             setUserDescription(userData.about);
             setUserAvatar(userData.avatar);
@@ -56,7 +57,9 @@ export default function Main({onEditProfile, onAddPlace, onEditAvatar, onCardCli
                 item => <Card
                     {...item}
                     key={item.id}
-                />)};
+                    onCardClick={onCardClick}
+                />)
+            };
           </ul>
         </section>
       </main>

@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 
 import '../index.css';
 import Header from './Header';
@@ -6,7 +6,6 @@ import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
-import Card from './Card';
 
 
 export default function App() {
@@ -24,7 +23,8 @@ export default function App() {
     setIsEditAvatarPopupOpen(true);
   }
   // открытие попапа предпросмотра карточки
-  const handleCardClick = () => {
+  const handleCardClick = ({name, link}) => {
+    setSelectedCard({name, link});
     setIsImagePopupOpen(true);
   }
   // закрытие любого из попапов
@@ -39,6 +39,7 @@ export default function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
 
   return (
@@ -49,6 +50,7 @@ export default function App() {
             onEditProfile={handleEditProfileClick}
             onAddPlace={handleAddPlaceClick}
             onEditAvatar={handleEditAvatarClick}
+            onCardClick={handleCardClick}
         />
         <Footer />
       </div>
@@ -145,16 +147,16 @@ export default function App() {
         </fieldset>
       </PopupWithForm>
 
-      <ImagePopup isOpen={isImagePopupOpen} onClose={closeAllPopups}/>
+      {/*попап предпросмотра изображения карточки*/}
+      <ImagePopup isOpen={isImagePopupOpen} onClose={closeAllPopups} {...selectedCard} />
 
       {/*попап подтверждения удаления карточки*/}
-      <div className="popup popup_confirm-delete">
-        <div className="popup__container">
-          <button type="button" className="popup__close-button"> </button>
-          <h2 className="popup__title">Вы уверены?</h2>
-          <button type="button" className="popup__save-button popup__save-button_confirmation">Да</button>
-        </div>
-      </div>
+      <PopupWithForm
+          name="confirmationDeleteCard"
+          formTitle="Вы уверены?"
+          submitButtonTitle="Да"
+      >
+      </PopupWithForm>
     </>
   );
 }
