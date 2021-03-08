@@ -34,7 +34,7 @@ export default function App() {
     setIsImagePopupOpen(false);
   }
 
-  // ХУКИ
+  // ХУКИ СОСТОЯНИЯ
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
