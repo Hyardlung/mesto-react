@@ -1,21 +1,38 @@
 import {useState, useEffect} from 'react';
 import {api} from '../utils/api';
+import Card from './Card';
 
-export default function Main({onEditProfile, onAddPlace, onEditAvatar}) {
+export default function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
 
   const [userName, setUserName] = useState('');
   const [userDescription, setUserDescription] = useState('');
   const [userAvatar, setUserAvatar] = useState('#');
+  const [cards, setCards] = useState([]);
 
-  // хук, подтягивающий данные о пользователе с сервера
+  // хук, подтягивающий данные о пользователе и массив карточек с сервера
   useEffect(() => {
-    api.getUserData()
-        .then(res => {
-          setUserName(res.name);
-          setUserDescription(res.about);
-          setUserAvatar(res.avatar);
+    Promise.all([
+        api.getUserData(),
+        api.getRemoteCards()
+    ])
+        .then(values => {
+            const userData = values[0];
+            const remoteCards = values[1];
+
+            const items = remoteCards.map(item => ({
+              name: item.name,
+              link: item.link,
+              likes: item.likes,
+              id: item._id,
+              ownerId: item.owner._id,
+            }));
+            setUserName(userData.name);
+            setUserDescription(userData.about);
+            setUserAvatar(userData.avatar);
+
+            setCards(items.reverse());
         })
-        .catch(err => console.log(err))
+        .catch(err => console.log(err));
   }, []);
 
   return (
@@ -35,21 +52,11 @@ export default function Main({onEditProfile, onAddPlace, onEditAvatar}) {
 
         <section className="elements">
           <ul className="elements__list">
-            <template className="elements__template">
-              <li className="card">
-                <div className="card__image-wrapper">
-                  <img src="#" alt="#" className="card__image" />
-                </div>
-                <button type="button" className="card__remove-button"> </button>
-                <div className="card__footer">
-                  <h2 className="card__heading"> </h2>
-                  <div className="card__like-wrapper">
-                    <button type="button" className="card__like-button"> </button>
-                    <span className="card__like-counter">0</span>
-                  </div>
-                </div>
-              </li>
-            </template>
+            {cards.map(
+                item => <Card
+                    {...item}
+                    key={item.id}
+                />)};
           </ul>
         </section>
       </main>
