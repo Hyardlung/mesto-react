@@ -15,9 +15,7 @@ export default function Main({onEditProfile, onAddPlace, onEditAvatar, onCardCli
         api.getUserData(),
         api.getRemoteCards()
     ])
-        .then(values => {
-            const userData = values[0];
-            const remoteCards = values[1];
+        .then(([userData, remoteCards]) => {
 
             const items = remoteCards.map(item => ({
               name: item.name,
@@ -59,7 +57,7 @@ export default function Main({onEditProfile, onAddPlace, onEditAvatar, onCardCli
                     key={item.id}
                     onCardClick={onCardClick}
                 />)
-            };
+            }
           </ul>
         </section>
       </main>

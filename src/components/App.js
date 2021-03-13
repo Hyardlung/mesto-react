@@ -9,6 +9,13 @@ import ImagePopup from './ImagePopup';
 
 
 export default function App() {
+  // ХУКИ СОСТОЯНИЯ
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+
   // ОБРАБОТЧИКИ СОБЫТИЙ
   // открытие попапа редактирования профиля
   const handleEditProfileClick = () => {
@@ -32,15 +39,9 @@ export default function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
+    setSelectedCard(false);
     setIsImagePopupOpen(false);
   }
-
-  // ХУКИ СОСТОЯНИЯ
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState({});
-  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
 
   return (
     <>
@@ -158,5 +159,5 @@ export default function App() {
       >
       </PopupWithForm>
     </>
-  );
+  )
 }
