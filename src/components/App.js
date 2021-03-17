@@ -1,11 +1,13 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 
 import '../index.css';
+import {api} from '../utils/api';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import {CurrentUserContext} from '../contexts/CurrentUserContext';
 
 
 export default function App() {
@@ -13,8 +15,18 @@ export default function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState({});
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
+
+  // эффект при монтировании: обновляет стейт текущего юзера из полученных с сервера данных
+  useEffect(() => {
+    api.getUserData()
+        .then(res => {
+          setCurrentUser(res);
+        })
+        .catch(err => console.log(err));
+  }, []);
 
   // ОБРАБОТЧИКИ СОБЫТИЙ
   // открытие попапа редактирования профиля
@@ -44,7 +56,7 @@ export default function App() {
   }
 
   return (
-    <>
+    <CurrentUserContext.Provider value={currentUser}>
       <div className="page root__page">
         <Header />
         <Main
@@ -158,6 +170,6 @@ export default function App() {
           submitButtonTitle="Да"
       >
       </PopupWithForm>
-    </>
+    </CurrentUserContext.Provider>
   )
 }
