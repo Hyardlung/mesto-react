@@ -1,4 +1,16 @@
-export default function Card({name, link, likes, onCardClick}) {
+import {useContext} from 'react';
+import {CurrentUserContext} from '../contexts/CurrentUserContext';
+
+export default function Card({owner, name, link, likes, onCardClick}) {
+  const currentUser = useContext(CurrentUserContext);
+
+  const isOwn = owner._id === currentUser._id;    // определение владельца карточки
+  const cardDeleteButtonClassName = (   // переменная для кнопки удаления
+      `card__remove-button ${isOwn && 'card__remove-button_active'}`
+  );
+  const isLiked = likes.some(i => i._id === currentUser._id);   // проверка наличия лайка текущего юзера
+  const cardLikeButtonClassName = '...';
+
   const cardClickHandler = () => {
     onCardClick({name, link});
   };

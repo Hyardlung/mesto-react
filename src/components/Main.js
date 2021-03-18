@@ -4,8 +4,7 @@ import {api} from '../utils/api';
 import Card from './Card';
 
 export default function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
-
-  const userData = useContext(CurrentUserContext);
+  const currentUser = useContext(CurrentUserContext);
 
   const [cards, setCards] = useState([]);
 
@@ -25,12 +24,12 @@ export default function Main({onEditProfile, onAddPlace, onEditAvatar, onCardCli
       <main className="main">
         <section className="profile page__profile">
           <div className="avatar profile__avatar">
-            <img src={userData.avatar} alt="Аватар пользователя" className="avatar__image" />
+            <img src={currentUser.avatar} alt="Аватар пользователя" className="avatar__image" />
             <button className="avatar__button" onClick={onEditAvatar}> </button>
           </div>
           <div className="profile__info">
-            <h1 className="profile__name">{userData.name}</h1>
-            <p className="profile__about">{userData.about}</p>
+            <h1 className="profile__name">{currentUser.name}</h1>
+            <p className="profile__about">{currentUser.about}</p>
             <button className="profile__edit-button" type="button" onClick={onEditProfile}> </button>
           </div>
           <button className="profile__add-button" type="button" onClick={onAddPlace}> </button>
