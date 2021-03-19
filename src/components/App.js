@@ -12,6 +12,7 @@ import {CurrentUserContext} from '../contexts/CurrentUserContext';
 
 export default function App() {
   // ХУКИ СОСТОЯНИЯ
+  const [cards, setCards] = useState([]);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -46,6 +47,15 @@ export default function App() {
     setSelectedCard({name, link});
     setIsImagePopupOpen(true);
   }
+  // лайк карточки
+  const handleCardLike = (cardLikes, cardId) => {
+    const isLiked = cardLikes.some(like => like._id === currentUser._id);
+    api.changeLikeCardStatus(cardId, isLiked)
+        .then(res => {
+          setCards(state => state.map(item => item._id === cardId ? res : c))
+        })
+        .catch(err => console.log(err));
+  }
   // закрытие любого из попапов
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
@@ -55,6 +65,18 @@ export default function App() {
     setIsImagePopupOpen(false);
   }
 
+  // хук, подтягивающий данные о пользователе и массив карточек с сервера
+  useEffect(() => {
+    Promise.all([
+      api.getRemoteCards()
+    ])
+        .then(([remoteCards]) => {
+
+          setCards(remoteCards.reverse());
+        })
+        .catch(err => console.log(err));
+  }, []);
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page root__page">
@@ -63,7 +85,9 @@ export default function App() {
             onEditProfile={handleEditProfileClick}
             onAddPlace={handleAddPlaceClick}
             onEditAvatar={handleEditAvatarClick}
+            cards={cards}
             onCardClick={handleCardClick}
+            onCardLike={handleCardLike}
         />
         <Footer />
       </div>
