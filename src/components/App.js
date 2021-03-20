@@ -48,14 +48,23 @@ export default function App() {
     setIsImagePopupOpen(true);
   }
   // лайк карточки
-  const handleCardLike = (cardLikes, cardId) => {
-    const isLiked = cardLikes.some(like => like._id === currentUser._id);
-    api.changeLikeCardStatus(cardId, isLiked)
+  const handleCardLike = card => {
+    const isLiked = card.likes.some(like => like._id === currentUser._id);
+    api.changeLikeCardStatus(card._id, isLiked)
         .then(res => {
-          setCards(state => state.map(item => item._id === cardId ? res : c))
+          setCards(state => state.map(c => c._id === card._id ? res : c))
         })
         .catch(err => console.log(err));
   }
+  // удаление карточки
+  const handleCardDelete = card => {
+    api.deleteCard(card._id)
+        .then(() => {
+          setCards(state => state.filter(c => c._id !== card._id))
+        })
+        .catch(err => console.log(err));
+  }
+
   // закрытие любого из попапов
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
@@ -72,7 +81,7 @@ export default function App() {
     ])
         .then(([remoteCards]) => {
 
-          setCards(remoteCards.reverse());
+          setCards(remoteCards);
         })
         .catch(err => console.log(err));
   }, []);
@@ -88,6 +97,7 @@ export default function App() {
             cards={cards}
             onCardClick={handleCardClick}
             onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
         />
         <Footer />
       </div>

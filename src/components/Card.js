@@ -1,7 +1,7 @@
 import {useContext} from 'react';
 import {CurrentUserContext} from '../contexts/CurrentUserContext';
 
-export default function Card({name, link, owner, _id, likes, onCardClick, onCardLike}) {
+export default function Card({name, link, owner, _id, likes, onCardClick, onCardLike, onCardDelete}) {
   const currentUser = useContext(CurrentUserContext);
 
   const isOwn = owner._id === currentUser._id;    // определение владельца карточки
@@ -21,6 +21,10 @@ export default function Card({name, link, owner, _id, likes, onCardClick, onCard
     onCardLike({likes, _id});
   }
 
+  const cardDeleteHandler = () => {
+    onCardDelete({_id})
+  }
+
   return (
       <li className="card">
         <div className="card__image-wrapper">
@@ -34,6 +38,7 @@ export default function Card({name, link, owner, _id, likes, onCardClick, onCard
         <button
             className={cardDeleteButtonClassName}
             type="button"
+            onClick={cardDeleteHandler}
         > </button>
         <div className="card__footer">
           <h2 className="card__heading">{name}</h2>

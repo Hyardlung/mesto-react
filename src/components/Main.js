@@ -3,7 +3,7 @@ import {useContext} from 'react';
 import Card from './Card';
 import {CurrentUserContext} from '../contexts/CurrentUserContext';
 
-export default function Main({cards, onEditProfile, onAddPlace, onEditAvatar, onCardClick, onCardLike}) {
+export default function Main({cards, onEditProfile, onAddPlace, onEditAvatar, onCardClick, onCardLike, onCardDelete}) {
   const currentUser = useContext(CurrentUserContext);
 
   return (
@@ -29,7 +29,8 @@ export default function Main({cards, onEditProfile, onAddPlace, onEditAvatar, on
                     key={item._id}
                     onCardClick={onCardClick}
                     onCardLike={onCardLike}
-                />).reverse()
+                    onCardDelete={onCardDelete}
+                />)
             }
           </ul>
         </section>
