@@ -1,24 +1,10 @@
-import {useState, useEffect, useContext} from 'react';
-import {CurrentUserContext} from '../contexts/CurrentUserContext';
-import {api} from '../utils/api';
+import {useContext} from 'react';
+
 import Card from './Card';
+import {CurrentUserContext} from '../contexts/CurrentUserContext';
 
-export default function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
+export default function Main({cards, onEditProfile, onAddPlace, onEditAvatar, onCardClick, onCardLike, onCardDelete}) {
   const currentUser = useContext(CurrentUserContext);
-
-  const [cards, setCards] = useState([]);
-
-  // хук, подтягивающий данные о пользователе и массив карточек с сервера
-  useEffect(() => {
-    Promise.all([
-        api.getRemoteCards()
-    ])
-        .then(([remoteCards]) => {
-
-            setCards(remoteCards.reverse());
-        })
-        .catch(err => console.log(err));
-  }, []);
 
   return (
       <main className="main">
@@ -42,6 +28,8 @@ export default function Main({onEditProfile, onAddPlace, onEditAvatar, onCardCli
                     {...item}
                     key={item._id}
                     onCardClick={onCardClick}
+                    onCardLike={onCardLike}
+                    onCardDelete={onCardDelete}
                 />)
             }
           </ul>
