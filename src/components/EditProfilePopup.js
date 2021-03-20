@@ -1,7 +1,18 @@
-import {CurrentUserContext} from '../contexts/CurrentUserContext';
+import {useState} from 'react';
 import PopupWithForm from './PopupWithForm';
+// import {CurrentUserContext} from '../contexts/CurrentUserContext';
 
 export default function EditProfilePopup({isOpen, onClose}) {
+  const [nameValue, setNameValue] = useState('');
+  const [description, setDescription] = useState('');
+
+  const handleChangeName = evt => {
+    setNameValue(evt.target.value);
+  }
+  const handleChangeDescription = evt => {
+    setDescription(evt.target.value);
+  }
+
   return (
     <PopupWithForm
         name="editProfileForm"
@@ -15,6 +26,8 @@ export default function EditProfilePopup({isOpen, onClose}) {
           className="popup__input"
           name="profileName"
           type="text"
+          value={nameValue}
+          onChange={handleChangeName}
           id="profile-name-input"
           minLength="2"
           maxLength="40"
@@ -27,6 +40,8 @@ export default function EditProfilePopup({isOpen, onClose}) {
           className="popup__input"
           name="profileAbout"
           type="text"
+          value={description}
+          onChange={handleChangeDescription}
           id="profile-about-input"
           minLength="2"
           maxLength="200"
