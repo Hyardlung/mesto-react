@@ -1,16 +1,31 @@
-import {useState} from 'react';
+import {useState, useEffect, useContext} from 'react';
 import PopupWithForm from './PopupWithForm';
-// import {CurrentUserContext} from '../contexts/CurrentUserContext';
+import {CurrentUserContext} from '../contexts/CurrentUserContext';
 
-export default function EditProfilePopup({isOpen, onClose}) {
-  const [nameValue, setNameValue] = useState('');
+export default function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
+  const currentUser = useContext(CurrentUserContext);
+  const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
+  // обновление стейта при изменении контекста
+  useEffect(() => {
+    setName(currentUser.name);
+    setDescription(currentUser.about);
+  }, [currentUser]);
+
   const handleChangeName = evt => {
-    setNameValue(evt.target.value);
+    setName(evt.target.value);
   }
   const handleChangeDescription = evt => {
     setDescription(evt.target.value);
+  }
+  // обработчик отправки формы
+  const handleSubmit = (evt) => {
+    evt.preventDefault();   // сброс дефолтного поведения формы
+    onUpdateUser({    // передача значений управляемых компонентов во внешний обработчик
+      name,
+      about: description,
+    });
   }
 
   return (
@@ -20,13 +35,14 @@ export default function EditProfilePopup({isOpen, onClose}) {
         submitButtonTitle="Сохранить"
         isOpen={isOpen}
         onClose={onClose}
+        onSubmit={handleSubmit}
     >
     <fieldset className="popup__form-fieldset">
       <input
           className="popup__input"
           name="profileName"
           type="text"
-          value={nameValue}
+          value={name || ''}
           onChange={handleChangeName}
           id="profile-name-input"
           minLength="2"
@@ -40,7 +56,7 @@ export default function EditProfilePopup({isOpen, onClose}) {
           className="popup__input"
           name="profileAbout"
           type="text"
-          value={description}
+          value={description || ''}
           onChange={handleChangeDescription}
           id="profile-about-input"
           minLength="2"

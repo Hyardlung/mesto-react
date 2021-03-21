@@ -12,7 +12,7 @@ import EditProfilePopup from './EditProfilePopup';
 
 
 export default function App() {
-  // ХУКИ СОСТОЯНИЯ
+  // СТЕЙТ-ПЕРЕМЕННЫЕ
   const [cards, setCards] = useState([]);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
@@ -65,6 +65,19 @@ export default function App() {
         })
         .catch(err => console.log(err));
   }
+  // обработчик редактирования профиля
+  const handleUpdateUser = newData => {
+    api.editUserData(newData)
+        .then((res) => {
+          setCurrentUser({
+            name: res.name,
+            about: res.about,
+            avatar: res.avatar,
+          });
+        })
+        .catch(err => console.log(err));
+    closeAllPopups();
+  }
 
   // закрытие любого из попапов
   const closeAllPopups = () => {
@@ -104,7 +117,11 @@ export default function App() {
       </div>
 
       {/*попап редактирования профиля*/}
-      <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
+      <EditProfilePopup
+          isOpen={isEditProfilePopupOpen}
+          onClose={closeAllPopups}
+          onUpdateUser={handleUpdateUser}
+      />
 
       {/*попап добавления новой карточки*/}
       <PopupWithForm
