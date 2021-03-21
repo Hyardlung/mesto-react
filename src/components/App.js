@@ -8,10 +8,11 @@ import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import {CurrentUserContext} from '../contexts/CurrentUserContext';
+import EditProfilePopup from './EditProfilePopup';
 
 
 export default function App() {
-  // ХУКИ СОСТОЯНИЯ
+  // СТЕЙТ-ПЕРЕМЕННЫЕ
   const [cards, setCards] = useState([]);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
@@ -64,6 +65,19 @@ export default function App() {
         })
         .catch(err => console.log(err));
   }
+  // обработчик редактирования профиля
+  const handleUpdateUser = newData => {
+    api.editUserData(newData)
+        .then((res) => {
+          setCurrentUser({
+            name: res.name,
+            about: res.about,
+            avatar: res.avatar,
+          });
+        })
+        .catch(err => console.log(err));
+    closeAllPopups();
+  }
 
   // закрытие любого из попапов
   const closeAllPopups = () => {
@@ -103,40 +117,11 @@ export default function App() {
       </div>
 
       {/*попап редактирования профиля*/}
-      <PopupWithForm
-          name="editProfileForm"
-          formTitle="Редактировать профиль"
-          submitButtonTitle="Сохранить"
+      <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
-      >
-        <fieldset className="popup__form-fieldset">
-          <input
-              className="popup__input"
-              name="profileName"
-              type="text"
-              id="profile-name-input"
-              minLength="2"
-              maxLength="40"
-              autoComplete="off"
-              placeholder="Ваше имя"
-              required
-          />
-          <span className="popup__input-error" id="profile-name-input-error"> </span>
-          <input
-              className="popup__input"
-              name="profileAbout"
-              type="text"
-              id="profile-about-input"
-              minLength="2"
-              maxLength="200"
-              autoComplete="off"
-              placeholder="О себе"
-              required
-          />
-          <span className="popup__input-error" id="profile-about-input-error"> </span>
-        </fieldset>
-      </PopupWithForm>
+          onUpdateUser={handleUpdateUser}
+      />
 
       {/*попап добавления новой карточки*/}
       <PopupWithForm

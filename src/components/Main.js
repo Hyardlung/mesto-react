@@ -1,5 +1,4 @@
 import {useContext} from 'react';
-
 import Card from './Card';
 import {CurrentUserContext} from '../contexts/CurrentUserContext';
 
@@ -23,9 +22,10 @@ export default function Main({cards, onEditProfile, onAddPlace, onEditAvatar, on
 
         <section className="elements">
           <ul className="elements__list">
-            {cards.map(
-                item => <Card
+            {cards.map(item =>
+                <Card
                     {...item}
+                    card={item}
                     key={item._id}
                     onCardClick={onCardClick}
                     onCardLike={onCardLike}
