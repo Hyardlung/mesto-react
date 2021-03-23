@@ -9,6 +9,7 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import {CurrentUserContext} from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from "./EditAvatarPopup";
 
 
 export default function App() {
@@ -19,7 +20,11 @@ export default function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState({
+    name: '',
+    about: '',
+    avatar: '',
+  });
 
   // эффект при монтировании: обновляет стейт текущего юзера из полученных с сервера данных
   useEffect(() => {
@@ -65,18 +70,20 @@ export default function App() {
         })
         .catch(err => console.log(err));
   }
+
   // обработчик редактирования профиля
   const handleUpdateUser = newData => {
     api.editUserData(newData)
-        .then((res) => {
-          setCurrentUser({
-            name: res.name,
-            about: res.about,
-            avatar: res.avatar,
-          });
-        })
-        .catch(err => console.log(err));
-    closeAllPopups();
+        .then(res => setCurrentUser(res))
+        .catch(err => console.log(err))
+        .finally(() => closeAllPopups());
+  }
+  // обработчик редактирования аватара
+  const handleUpdateAvatar = newData => {
+    api.updateAvatar(newData)
+        .then(res => setCurrentUser(res))
+        .catch(err => console.log(err))
+        .finally(() => closeAllPopups());
   }
 
   // закрытие любого из попапов
@@ -123,6 +130,13 @@ export default function App() {
           onUpdateUser={handleUpdateUser}
       />
 
+      {/*попап редактирования аватара пользователя*/}
+      <EditAvatarPopup
+          isOpen={isEditAvatarPopupOpen}
+          onClose={closeAllPopups}
+          onUpdateAvatar={handleUpdateAvatar}
+      />
+
       {/*попап добавления новой карточки*/}
       <PopupWithForm
           name="addPlaceForm"
@@ -157,30 +171,12 @@ export default function App() {
         </fieldset>
       </PopupWithForm>
 
-      {/*попап редактирования аватара пользователя*/}
-      <PopupWithForm
-          name="updateAvatarForm"
-          formTitle="Обновить аватар"
-          submitButtonTitle="Сохранить"
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-      >
-        <fieldset className="popup__form-fieldset">
-          <input
-              className="popup__input"
-              name="avatarLink"
-              type="url"
-              id="avatar-input"
-              autoComplete="off"
-              placeholder="Ссылка на картинку"
-              required
-          />
-          <span className="popup__input-error" id="avatar-input-error"> </span>
-        </fieldset>
-      </PopupWithForm>
-
       {/*попап предпросмотра изображения карточки*/}
-      <ImagePopup isOpen={isImagePopupOpen} onClose={closeAllPopups} {...selectedCard} />
+      <ImagePopup
+          isOpen={isImagePopupOpen}
+          onClose={closeAllPopups}
+          {...selectedCard}
+      />
 
       {/*попап подтверждения удаления карточки*/}
       <PopupWithForm

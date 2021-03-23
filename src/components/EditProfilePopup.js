@@ -42,7 +42,7 @@ export default function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
           className="popup__input"
           name="profileName"
           type="text"
-          value={name || ''}
+          value={name}
           onChange={handleChangeName}
           id="profile-name-input"
           minLength="2"
@@ -56,7 +56,7 @@ export default function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
           className="popup__input"
           name="profileAbout"
           type="text"
-          value={description || ''}
+          value={description}
           onChange={handleChangeDescription}
           id="profile-about-input"
           minLength="2"
