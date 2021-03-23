@@ -65,12 +65,12 @@ class Api {
       headers: this._headers
     }).then(this._getResponse)
   }
-  // запрос на обновление данных пользователя
+  // запрос на обновление аватара пользователя
   updateAvatar(imgUrl) {
     return fetch(`${this._url}users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,
-      body: JSON.stringify({avatar: imgUrl.avatarLink})
+      body: JSON.stringify({avatar: imgUrl.avatar})
     }).then(this._getResponse)
   }
   // изменение статуса кнопки лайка
