@@ -20,7 +20,7 @@ export default function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
     setDescription(evt.target.value);
   }
   // обработчик отправки формы
-  const handleSubmit = (evt) => {
+  const handleSubmit = evt => {
     evt.preventDefault();   // сброс дефолтного поведения формы
     onUpdateUser({    // передача значений управляемых компонентов во внешний обработчик
       name,

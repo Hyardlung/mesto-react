@@ -9,7 +9,8 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import {CurrentUserContext} from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
-import EditAvatarPopup from "./EditAvatarPopup";
+import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
 
 
 export default function App() {
@@ -26,11 +27,15 @@ export default function App() {
     avatar: '',
   });
 
-  // эффект при монтировании: обновляет стейт текущего юзера из полученных с сервера данных
+  // хук, подтягивающий данные о пользователе и массив карточек с сервера
   useEffect(() => {
-    api.getUserData()
-        .then(res => {
-          setCurrentUser(res);
+    Promise.all([
+      api.getRemoteCards(),
+      api.getUserData()
+    ])
+        .then(([remoteCards, userData]) => {
+          setCards(remoteCards);
+          setCurrentUser(userData);
         })
         .catch(err => console.log(err));
   }, []);
@@ -85,6 +90,13 @@ export default function App() {
         .catch(err => console.log(err))
         .finally(() => closeAllPopups());
   }
+  // обработчик добавления карточки
+  const handleAddPlaceSubmit = (card) => {
+    api.sendCard(card)
+        .then(newCard => setCards([newCard, ...cards]))
+        .catch(err => console.log(err))
+        .finally(() => closeAllPopups());
+  }
 
   // закрытие любого из попапов
   const closeAllPopups = () => {
@@ -94,18 +106,6 @@ export default function App() {
     setSelectedCard(false);
     setIsImagePopupOpen(false);
   }
-
-  // хук, подтягивающий данные о пользователе и массив карточек с сервера
-  useEffect(() => {
-    Promise.all([
-      api.getRemoteCards()
-    ])
-        .then(([remoteCards]) => {
-
-          setCards(remoteCards);
-        })
-        .catch(err => console.log(err));
-  }, []);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -138,38 +138,11 @@ export default function App() {
       />
 
       {/*попап добавления новой карточки*/}
-      <PopupWithForm
-          name="addPlaceForm"
-          formTitle="Новое место"
-          submitButtonTitle="Создать"
+      <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
-      >
-        <fieldset className="popup__form-fieldset">
-          <input
-              className="popup__input"
-              name="cardName"
-              type="text"
-              id="card-name-input"
-              minLength="2"
-              maxLength="30"
-              autoComplete="off"
-              placeholder="Название"
-              required
-          />
-          <span className="popup__input-error" id="card-name-input-error"> </span>
-          <input
-              className="popup__input"
-              name="cardImage"
-              type="url"
-              id="card-link-input"
-              autoComplete="off"
-              placeholder="Ссылка на картинку"
-              required
-          />
-          <span className="popup__input-error" id="card-link-input-error"> </span>
-        </fieldset>
-      </PopupWithForm>
+          onAddPlace={handleAddPlaceSubmit}
+      />
 
       {/*попап предпросмотра изображения карточки*/}
       <ImagePopup
@@ -186,5 +159,5 @@ export default function App() {
       >
       </PopupWithForm>
     </CurrentUserContext.Provider>
-  )
+  );
 }

@@ -8,7 +8,8 @@ export default function EditAvatarPopup({isOpen, onClose, onUpdateAvatar}) {
     evt.preventDefault();
     onUpdateAvatar({
       avatar: avatarInputRef.current.value,
-    })
+    });
+    avatarInputRef.current.value = null;
   }
 
   return (
