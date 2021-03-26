@@ -98,6 +98,12 @@ export default function App() {
         .finally(() => closeAllPopups());
   }
 
+  const handleEscClose = (evt) => {
+    if (evt.key === 'Escape') {
+      closeAllPopups()
+    }
+  }
+
   // закрытие любого из попапов
   const closeAllPopups = () => {
     setIsEditProfilePopupOpen(false);
@@ -107,9 +113,10 @@ export default function App() {
     setIsImagePopupOpen(false);
   }
 
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <div className="page root__page">
+      <div className="page root__page" onKeyDown={handleEscClose}>
         <Header />
         <Main
             onEditProfile={handleEditProfileClick}
