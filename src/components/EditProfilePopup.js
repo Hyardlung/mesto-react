@@ -2,7 +2,7 @@ import {useState, useEffect, useContext} from 'react';
 import PopupWithForm from './PopupWithForm';
 import {CurrentUserContext} from '../contexts/CurrentUserContext';
 
-export default function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
+export default function EditProfilePopup({isOpen, onClose, onCloseOverlay, onUpdateUser}) {
   const currentUser = useContext(CurrentUserContext);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -35,6 +35,7 @@ export default function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
         submitButtonTitle="Сохранить"
         isOpen={isOpen}
         onClose={onClose}
+        onCloseOverlay={onCloseOverlay}
         onSubmit={handleSubmit}
     >
     <fieldset className="popup__form-fieldset">
