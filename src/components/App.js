@@ -80,26 +80,32 @@ export default function App() {
   const handleUpdateUser = newData => {
     api.editUserData(newData)
         .then(res => setCurrentUser(res))
+        .then(() => closeAllPopups())
         .catch(err => console.log(err))
-        .finally(() => closeAllPopups());
   }
   // обработчик редактирования аватара
   const handleUpdateAvatar = newData => {
     api.updateAvatar(newData)
         .then(res => setCurrentUser(res))
+        .then(() => closeAllPopups())
         .catch(err => console.log(err))
-        .finally(() => closeAllPopups());
   }
   // обработчик добавления карточки
   const handleAddPlaceSubmit = (card) => {
     api.sendCard(card)
         .then(newCard => setCards([newCard, ...cards]))
+        .then(() => closeAllPopups())
         .catch(err => console.log(err))
-        .finally(() => closeAllPopups());
   }
-
+  // обработчик закрытия попапа по нажатию на Esc
   const handleEscClose = (evt) => {
     if (evt.key === 'Escape') {
+      closeAllPopups()
+    }
+  }
+  // обработчик закрытия попапа по клику на оверлей
+  const handleCloseOverlay = (evt) => {
+    if (evt.target.classList.contains('popup_opened')) {
       closeAllPopups()
     }
   }
@@ -116,7 +122,7 @@ export default function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <div className="page root__page" onKeyDown={handleEscClose}>
+      <div className="page root__page" onKeyDown={handleEscClose} >
         <Header />
         <Main
             onEditProfile={handleEditProfileClick}
@@ -134,6 +140,7 @@ export default function App() {
       <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
+          onCloseOverlay={handleCloseOverlay}
           onUpdateUser={handleUpdateUser}
       />
 
@@ -141,6 +148,7 @@ export default function App() {
       <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
+          onCloseOverlay={handleCloseOverlay}
           onUpdateAvatar={handleUpdateAvatar}
       />
 
@@ -148,6 +156,7 @@ export default function App() {
       <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
+          onCloseOverlay={handleCloseOverlay}
           onAddPlace={handleAddPlaceSubmit}
       />
 
@@ -155,6 +164,7 @@ export default function App() {
       <ImagePopup
           isOpen={isImagePopupOpen}
           onClose={closeAllPopups}
+          onCloseOverlay={handleCloseOverlay}
           {...selectedCard}
       />
 

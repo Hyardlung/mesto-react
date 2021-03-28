@@ -2,7 +2,7 @@ import {useState} from 'react';
 import PopupWithForm from './PopupWithForm';
 
 
-export default function AddPlacePopup ({isOpen, onClose, onAddPlace}) {
+export default function AddPlacePopup ({isOpen, onClose, onCloseOverlay, onAddPlace}) {
   const [cardName, setCardName] = useState('');
   const [cardLink, setCardLink] = useState('');
 
@@ -29,6 +29,7 @@ export default function AddPlacePopup ({isOpen, onClose, onAddPlace}) {
           submitButtonTitle="Создать"
           isOpen={isOpen}
           onClose={onClose}
+          onCloseOverlay={onCloseOverlay}
           onSubmit={handleSubmit}
       >
         <fieldset className="popup__form-fieldset">

@@ -1,7 +1,7 @@
 import {useRef} from 'react';
 import PopupWithForm from './PopupWithForm';
 
-export default function EditAvatarPopup({isOpen, onClose, onUpdateAvatar}) {
+export default function EditAvatarPopup({isOpen, onClose, onCloseOverlay, onUpdateAvatar}) {
   const avatarInputRef = useRef();
 
   const handleSubmit = (evt) => {
@@ -19,6 +19,7 @@ export default function EditAvatarPopup({isOpen, onClose, onUpdateAvatar}) {
           submitButtonTitle="Сохранить"
           isOpen={isOpen}
           onClose={onClose}
+          onCloseOverlay={onCloseOverlay}
           onSubmit={handleSubmit}
       >
         <fieldset className="popup__form-fieldset">
